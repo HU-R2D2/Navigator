@@ -59,6 +59,8 @@ namespace r2d2{
         if(has_reached_waypoint()){
             std::vector<Coordinate> & path_vector = LockingSharedObject<std
                 ::vector<Coordinate>>::Accessor(path).access();
+            Pilot & p = SharedObject<Pilot>::Accessor(pilot).access();
+            p.stop();
             if (!path_vector.empty()){
                 CoordinateAttitude & coordinate_attitude_data =
                     SharedObject<CoordinateAttitude>
@@ -81,15 +83,15 @@ namespace r2d2{
                         ::rad, 0 * r2d2::Angle::rad, angle)};
                 path_vector.erase(path_vector.begin());
 
-                SharedObject<Pilot>::Accessor(pilot).access()
-                    .go_to_position(current_waypoint);
+                p.go_to_position(current_waypoint);
             }
         }
     }
 
     void DefaultNavigator::run(){
+        int period_ms = 100;
         while(true){
-            std::this_thread::sleep_for(std::chrono::microseconds(500000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(period_ms));
             update();
         }
     }

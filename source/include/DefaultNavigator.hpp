@@ -59,7 +59,6 @@ namespace r2d2{
         DefaultNavigator(r2d2::Pilot & pilot,
             r2d2::AStarPathFinder & path_finder,
             CoordinateAttitude & robot_coordinate_attitude,
-            CoordinateAttitude & goal,
 			CoordinateAttitude waypoint_precision_margin);
 
         void update() override;

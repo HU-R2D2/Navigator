@@ -47,16 +47,15 @@
 
 r2d2::Navigator::Navigator(r2d2::Pilot & pilot,
     r2d2::AStarPathFinder & path_finder,
-    CoordinateAttitude & robot_coordinate_attitude,
-    CoordinateAttitude & goal):
+    CoordinateAttitude & robot_coordinate_attitude):
         pilot(pilot),
         path_finder(path_finder),
         robot_coordinate_attitude(robot_coordinate_attitude),
-        goal(goal),
+        goal(goal_object),
         path(p){
 }
 
-void r2d2::Navigator::set_goal(CoordinateAttitude new_goal){
+bool r2d2::Navigator::set_goal(CoordinateAttitude new_goal){
     LockingSharedObject<CoordinateAttitude>::Accessor goal_accessor(goal);
     CoordinateAttitude & goal_data  = goal_accessor.access();
     goal_data = new_goal;
@@ -71,11 +70,9 @@ void r2d2::Navigator::set_goal(CoordinateAttitude new_goal){
 
     if(path_finder.get_path_to_coordinate(robot_orientation_data.coordinate,
         new_goal.coordinate, path_vector)){
-
-        for (int i = 0; i < path_vector.size(); ++i){
-            std::cout << path_vector[i] << std::endl;
-        }
+            return true;
     }
+    return false;
 }
 
 LockingSharedObject<CoordinateAttitude> & r2d2::Navigator::get_goal(){

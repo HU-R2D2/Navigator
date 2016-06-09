@@ -80,8 +80,7 @@ namespace r2d2{
 		//!
 		Navigator(r2d2::Pilot & pilot,
 			r2d2::AStarPathFinder & path_finder,
-			CoordinateAttitude & robot_coordinate_attitude,
-            CoordinateAttitude & goal);
+			CoordinateAttitude & robot_coordinate_attitude);
 
         //!
     	//! @brief     responsible for the navigation of the pilot object to the
@@ -91,10 +90,10 @@ namespace r2d2{
 
 
         //!
-        //! @brief      sets new Coordinates for destination goal
+        //! @brief     sets new Coordinates for destination goal
         //! @param     goal     CoordinatesAttitude of the destination goal
         //!
-		void set_goal(CoordinateAttitude goal);
+		bool set_goal(CoordinateAttitude goal);
 
 
         //!
@@ -111,6 +110,7 @@ namespace r2d2{
 		CoordinateAttitude current_waypoint{r2d2::Coordinate(), Attitude()};
 	private:
 		std::vector<r2d2::Coordinate> p;
+        CoordinateAttitude goal_object = {r2d2::Coordinate::origin, Attitude()};
 	};
 }
 

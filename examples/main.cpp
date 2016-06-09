@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include <LockingSharedObject.hpp>
+//#include <LockingSharedObject.hpp>
 #include <AStarPathFinder.hpp>
 #include <PilotSimulation.hpp>
 
@@ -56,7 +56,7 @@ int main(int argc,char *argv[]) {
     CoordinateAttitude init_goal{r2d2::Coordinate::origin, Attitude()};
 
     r2d2::DefaultNavigator navigator(pilot, path_finder, pilot_position,
-        init_goal, {r2d2::Coordinate(3.0 * r2d2::Length::METER, 3.0 *
+        {r2d2::Coordinate(3.0 * r2d2::Length::METER, 3.0 *
         r2d2::Length::METER, 0 * r2d2::Length::METER), Attitude(0 *
         r2d2::Angle::rad, 0 * r2d2::Angle::rad, 0.087 * r2d2::Angle::rad)});
 

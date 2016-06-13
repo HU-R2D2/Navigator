@@ -3,7 +3,6 @@
 
 #include <AStarPathFinder.hpp>
 #include <PilotSimulation.hpp>
-//#include <Translation.hpp>
 
 #include "../source/include/DefaultNavigator.hpp"
 
@@ -68,9 +67,11 @@ TEST(Navigator, set_goal){
         49 * r2d2::Length::METER, 0 * r2d2::Length::METER), Attitude()};
     navigator.set_goal(new_goal);
 
-    CoordinateAttitude goal_navigator =  SharedObject<CoordinateAttitude>::Accessor(navigator.get_goal()).access();
+    CoordinateAttitude goal_navigator =  SharedObject<CoordinateAttitude>
+        ::Accessor(navigator.get_goal()).access();
 
-    ASSERT_TRUE(coord_equal(new_goal.coordinate, goal_navigator.coordinate) && attitude_equal(new_goal.attitude, goal_navigator.attitude));
+    ASSERT_TRUE(coord_equal(new_goal.coordinate, goal_navigator.coordinate)
+        && attitude_equal(new_goal.attitude, goal_navigator.attitude));
 }
 
 TEST(Navigator, set_goal2){
@@ -91,12 +92,21 @@ TEST(Navigator, set_goal2){
         waypoint);
 
     //map initialisationstd::vector<std::vector<int>> cornerSqueezeMap;
+
+    //map_size_x and map_size_y are the dimentions of the test map
+    int map_size_x = 50;
+    int map_size_y = 50;
+    //The map contains a wall from bottom left to top right.
+    //in this wall there will be a gap, this gap is from start_gap to end_gap
+    int start_gap = 4;
+    int end_gap = 6;
+
     std::vector<std::vector<int>> cornerSqueezeMap;
-    for (int x = 0; x < 50; x++) {
+    for (int x = 0; x < map_size_x; x++) {
         std::vector<int> current;
-        for (int y = 50; y > 0; y--) {
+        for (int y = map_size_y; y > 0; y--) {
             if (x == y) {
-                if (x >= 4 && x <= 6){
+                if (x >= start_gap && x <= end_gap){
                     current.push_back(0);
                 }
                 else{

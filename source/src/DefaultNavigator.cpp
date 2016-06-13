@@ -47,11 +47,11 @@
 
 namespace r2d2{
 
-    DefaultNavigator::DefaultNavigator(r2d2::Pilot & pilot,
-        r2d2::AStarPathFinder & path_finder,
+    DefaultNavigator::DefaultNavigator(Pilot & pilot,
+        PathFinder & path_finder,
         CoordinateAttitude & robot_coordinate_attitude,
         CoordinateAttitude waypoint_precision_margin):
-            r2d2::Navigator(pilot, path_finder, robot_coordinate_attitude),
+            Navigator(pilot, path_finder, robot_coordinate_attitude),
             waypoint_precision_margin(waypoint_precision_margin){}
 
     void DefaultNavigator::update(){
@@ -64,21 +64,22 @@ namespace r2d2{
                 CoordinateAttitude & coordinate_attitude_data =
                     SharedObject<CoordinateAttitude>
                     ::Accessor(robot_coordinate_attitude).access();
-                r2d2::Angle angle;
+                Angle angle;
                 if (path_vector.size() > 1){
                     angle = atan2((path_vector[1].get_y() -
-                        current_waypoint.coordinate.get_y()) / r2d2::Length
+                        current_waypoint.coordinate.get_y()) / Length
                         ::METER, (path_vector[1].get_x() -
-                        current_waypoint.coordinate.get_x()) / r2d2::Length
-                        ::METER) * r2d2::Angle::rad;
+                        current_waypoint.coordinate.get_x()) / Length
+                        ::METER) * Angle::rad;
                 }
                 else {
-                    angle = SharedObject<CoordinateAttitude>::Accessor(get_goal())
-                        .access().attitude.angle_z.get_angle() * r2d2::Angle::rad;
+                    angle = SharedObject<CoordinateAttitude>::Accessor(
+                        get_goal()).access().attitude.angle_z.get_angle()
+                        * Angle::rad;
                 }
 
-                current_waypoint = {path_vector[0], Attitude(0 * r2d2::Angle
-                        ::rad, 0 * r2d2::Angle::rad, angle)};
+                current_waypoint = {path_vector[0], Attitude(0 * Angle
+                        ::rad, 0 * Angle::rad, angle)};
                 path_vector.erase(path_vector.begin());
 
                 p.go_to_position(current_waypoint);
@@ -94,11 +95,6 @@ namespace r2d2{
         }
     }
 
-
-    CoordinateAttitude DefaultNavigator::get_current_waypoint(){
-        return current_waypoint;
-    }
-
     bool DefaultNavigator::has_reached_waypoint(){
         CoordinateAttitude & coordinate_attitude_data =
             SharedObject<CoordinateAttitude>
@@ -106,25 +102,25 @@ namespace r2d2{
 
         // check if the x coordinate is in range of the precision_margin
         if (coordinate_attitude_data.coordinate.get_x() <
-            (current_waypoint.coordinate + r2d2::Translation{
+            (current_waypoint.coordinate + Translation{
             waypoint_precision_margin.coordinate.get_x(), 0 *
-            r2d2::Length::METER, 0 * r2d2::Length::METER}).get_x() &&
+            Length::METER, 0 * Length::METER}).get_x() &&
             coordinate_attitude_data.coordinate.get_x() >
             (current_waypoint.coordinate -
-            r2d2::Translation{waypoint_precision_margin.coordinate.get_x(),
-            0 * r2d2::Length::METER, 0 * r2d2::Length::METER}).get_x()){
+            Translation{waypoint_precision_margin.coordinate.get_x(),
+            0 * Length::METER, 0 * Length::METER}).get_x()){
 
             // check if the y coordinate is in range of the precision_margin
             if (coordinate_attitude_data.coordinate.get_y() <
-                (current_waypoint.coordinate + r2d2::Translation{0 *
-                r2d2::Length::METER,
+                (current_waypoint.coordinate + Translation{0 *
+                Length::METER,
                 waypoint_precision_margin.coordinate.get_y(),0 *
-                r2d2::Length::METER}).get_y() &&
+                Length::METER}).get_y() &&
                 coordinate_attitude_data.coordinate.get_y() >
-                (current_waypoint.coordinate - r2d2::Translation{0 *
-                r2d2::Length::METER,
+                (current_waypoint.coordinate - Translation{0 *
+                Length::METER,
                 waypoint_precision_margin.coordinate.get_y(), 0 *
-                r2d2::Length::METER}).get_y()){
+                Length::METER}).get_y()){
 
                 // check if the attitude yaw is in range of the percision_margin
                 if (coordinate_attitude_data.attitude.angle_z.get_angle() <

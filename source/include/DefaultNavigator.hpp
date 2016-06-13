@@ -54,16 +54,47 @@
 
 namespace r2d2{
 
+    //!
+    //! @author     Anas Shehata 1651951
+    //! @author     Timon van den Brink 1664554
+	//! @date       06-06-16
+	//! @version    1.0
+	//! @brief      The DefaultNavigator class is an active impementation
+    //!             of the class Navigator. DefaultNavigator is responsible
+    //!             for active coordination of the Pilot.
+	//!             It contains 2 CoordinateAttitude attributes,
+    //!             1 pathfinder attribute, 1 vector attribute.
+    //!             and 1 pilot attribute.
+	//!
     class DefaultNavigator : public Navigator{
     public:
-        DefaultNavigator(r2d2::Pilot & pilot,
-            r2d2::AStarPathFinder & path_finder,
+
+        //!
+        //!@brief     Constructor for DefaultNavigator
+        //!@param     pilot    Pilot object that is to be navigated
+        //!@param     path_finder     PathFinder object which calculates a path
+        //!           between two points
+        //!@param     robot_coordinate_attitude    CoordinateAttitude object
+        //!           which contains Pilot currents coordinates
+        //!@param     waypoint_precision_margin    CoordinateAttitude object
+        //!           which is the precision_margin of every waypoint
+        //!
+        DefaultNavigator(Pilot & pilot,
+            PathFinder & path_finder,
             CoordinateAttitude & robot_coordinate_attitude,
 			CoordinateAttitude waypoint_precision_margin);
 
+        //!
+    	//! @brief     responsible for the navigation of the pilot object to the
+        //!            destined goal.
+        //!
         void update() override;
-		void run();
-		CoordinateAttitude get_current_waypoint();
+
+        //!
+        //! @brief     Function that periodically updates the DefaultNavigator
+        //!
+        void run();
+
 	private:
 	    bool has_reached_waypoint();
 		CoordinateAttitude waypoint_precision_margin;

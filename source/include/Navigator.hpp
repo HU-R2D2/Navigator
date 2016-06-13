@@ -59,59 +59,71 @@ namespace r2d2{
     //!
     //! @author     Anas Shehata 1651951
     //! @author     Timon van den Brink 1664554
-	//! @date       06-06-16
-	//! @version    1.0
-	//! @brief      The Navigator class is an interface class for Navigators
+    //! @date       06-06-16
+    //! @version    1.0
+    //! @brief      The Navigator class is an interface class for Navigators
     //!             responsible for plotting the course of a given path.
-	//!             It contains 2 CoordinateAttitude attributes,
+    //!             It contains 2 CoordinateAttitude attributes,
     //!             1 pathfinder attribute, 1 vector attribute.
     //!             and 1 pilot attribute.
-	//!
-	class Navigator{
-	public:
+    //!
+    class Navigator{
+    public:
 
         //!
-		//!@brief     Constructor for Navigator
-		//!@param     pilot    Pilot object that is to be navigated
-		//!@param     path_finder     PathFinder object which calculates a path
+        //!@brief     Constructor for Navigator
+        //!@param     pilot    Pilot object that is to be navigated
+        //!@param     path_finder     PathFinder object which calculates a path
         //!           between two points
-		//!@param     robot_coordinate_attitude    CoordinateAttitude object
+        //!@param     robot_coordinate_attitude    CoordinateAttitude object
         //!           which contains Pilot currents coordinates
-		//!
-		Navigator(r2d2::Pilot & pilot,
-			r2d2::AStarPathFinder & path_finder,
-			CoordinateAttitude & robot_coordinate_attitude);
+        //!@param     waypoint_precision_margin    CoordinateAttitude object
+        //!           which is the precision_margin of every waypoint
+        //!
+        //!
+        Navigator(Pilot & pilot,
+            PathFinder & path_finder,
+            CoordinateAttitude & robot_coordinate_attitude);
 
         //!
-    	//! @brief     responsible for the navigation of the pilot object to the
-        //!            destined goal
+        //! @brief     responsible for the navigation of the pilot object to the
+        //!            destined goal.
         //!
-		virtual void update() = 0;
+        virtual void update() = 0;
 
 
         //!
         //! @brief     sets new Coordinates for destination goal
         //! @param     goal     CoordinatesAttitude of the destination goal
         //!
-		bool set_goal(CoordinateAttitude goal);
+        bool set_goal(CoordinateAttitude goal);
 
 
         //!
         //! @brief  Getter for goal CoordinateAttitude.
         //! @return LockingSharedObject<CoordinateAttitude> goal
         //!
-		LockingSharedObject<CoordinateAttitude> & get_goal();
-	protected:
-		LockingSharedObject<r2d2::Pilot> pilot;
-		r2d2::AStarPathFinder & path_finder;
-		LockingSharedObject<CoordinateAttitude> robot_coordinate_attitude;
-		LockingSharedObject<CoordinateAttitude> goal;
-		LockingSharedObject<std::vector<r2d2::Coordinate>> path;
-		CoordinateAttitude current_waypoint{r2d2::Coordinate(), Attitude()};
-	private:
-		std::vector<r2d2::Coordinate> p;
-        CoordinateAttitude goal_object = {r2d2::Coordinate::origin, Attitude()};
-	};
+        LockingSharedObject<CoordinateAttitude> & get_goal();
+
+
+        //!
+        //! @brief     getter for the current_waypoint in the path of Navigator.
+        //!            returns a copy of the current_waypoint
+        //!
+        //! @return    CoordinateAttitude current_waypoint
+        //!
+        CoordinateAttitude get_current_waypoint();
+    protected:
+        LockingSharedObject<Pilot> pilot;
+        PathFinder & path_finder;
+        LockingSharedObject<CoordinateAttitude> robot_coordinate_attitude;
+        LockingSharedObject<CoordinateAttitude> goal;
+        LockingSharedObject<std::vector<Coordinate>> path;
+        CoordinateAttitude current_waypoint{Coordinate(), Attitude()};
+    private:
+        std::vector<Coordinate> p;
+        CoordinateAttitude goal_object = {Coordinate::origin, Attitude()};
+    };
 }
 
 #endif

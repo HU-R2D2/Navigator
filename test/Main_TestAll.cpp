@@ -38,7 +38,7 @@ TEST(Navigator, set_goal){
     r2d2::RobotStatus robot_status(pilot_position, s);
 
     r2d2::Speed max_speed = 1.00 * r2d2::Length::METER/r2d2::Duration::SECOND;
-    Rotation rotation_speed(0.1);
+    r2d2::Angle rotation_speed(0.1 * r2d2::Angle::rad);
 
     CoordinateAttitude waypoint = {r2d2::Coordinate(), Attitude()};
 
@@ -84,7 +84,7 @@ TEST(Navigator, set_goal2){
     r2d2::RobotStatus robot_status(pilot_position, s);
 
     r2d2::Speed max_speed = 1.00 * r2d2::Length::METER/r2d2::Duration::SECOND;
-    Rotation rotation_speed(0.1);
+    r2d2::Angle rotation_speed(0.1 * r2d2::Angle::rad);
 
     CoordinateAttitude waypoint = {r2d2::Coordinate(), Attitude()};
 

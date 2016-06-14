@@ -1,5 +1,8 @@
 //! \addtogroup	0033 Navigator
-//! \brief
+//! \brief By introducing the navigator module to R2D2 links between different
+//! parts of r2d2 which are responsible for moving the robot will be possible.
+//! The navigator module is resposible for ploting courses from pilots position
+//! to destination goal.
 //!
 //!
 //! \file   Navigator.hpp

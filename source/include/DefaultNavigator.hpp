@@ -1,5 +1,8 @@
 //! \addtogroup	0033 Navigator
-//! \brief
+//! \brief By introducing the navigator module to R2D2 links between different
+//! parts of r2d2 which are responsible for moving the robot will be possible.
+//! The navigator module is resposible for ploting courses from pilots position
+//! to destination goal.
 //!
 //!
 //! \file   DefaultNavigator.hpp
@@ -7,8 +10,8 @@
 //! \author Timon van den Brink 1664554
 //! \date   Created: 06-06-2016
 //! \date   Last Modified: 06-06-2016
-//! \brief  the interface Navigator is an interface for Navigators to plot the
-//!          course of a given path.
+//! \brief  In this file the Implementation of the DefaultNavigator
+//! can be found. The Implementation of Navigator is an active one.
 //!
 //!
 //! \copyright Copyright � 2016, HU University of Applied Sciences Utrecht.
@@ -48,7 +51,6 @@
 
 #include <chrono>
 #include <thread>
-#include <cmath>
 
 #include "Navigator.hpp"
 

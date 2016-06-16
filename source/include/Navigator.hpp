@@ -137,8 +137,8 @@ namespace r2d2{
         //!            the path the Pilot will follow.this object is initialized
         //!            with private member p
         LockingSharedObject<std::vector<Coordinate>> path;
-        //! @param     CoordinateAttitude which contains the current waypoint of
-        //!            the Pilot is following. ;
+        //! @param     current_waypoint is a CoordinateAttitude which contains
+        //!            the current waypoint of the Pilot is following.
         CoordinateAttitude current_waypoint{Coordinate(), Attitude()};
     private:
         std::vector<Coordinate> p;

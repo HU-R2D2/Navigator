@@ -46,13 +46,13 @@ TEST(Navigator, set_goal){
         waypoint);
 
     //map initialisation
-    r2d2::Map map(50, 50, 0);
+    r2d2::Dummy map(50, 50, 0);
 
     //pathfinder initialisation
     r2d2::Translation robotBox{.5 * r2d2::Length::METER,
                                .5 * r2d2::Length::METER,
                                0 * r2d2::Length::METER};
-    LockingSharedObject<r2d2::Map> sharedMap{map};
+    LockingSharedObject<r2d2::ReadOnlyMap> sharedMap{map};
     r2d2::AStarPathFinder path_finder(sharedMap, {{}, robotBox});
 
     //navigator initialisation
@@ -118,13 +118,13 @@ TEST(Navigator, set_goal2){
         }
         cornerSqueezeMap.push_back(current);
     }
-    r2d2::Map map(cornerSqueezeMap);
+    r2d2::Dummy map(cornerSqueezeMap);
 
     //pathfinder initialisation
     r2d2::Translation robotBox{.5 * r2d2::Length::METER,
                                .5 * r2d2::Length::METER,
                                0 * r2d2::Length::METER};
-    LockingSharedObject<r2d2::Map> sharedMap{map};
+    LockingSharedObject<r2d2::ReadOnlyMap> sharedMap{map};
     r2d2::AStarPathFinder path_finder(sharedMap, {{}, robotBox});
 
     //navigator initialisation

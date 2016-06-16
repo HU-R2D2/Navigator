@@ -42,14 +42,14 @@ int main(int argc,char *argv[]) {
         }
         cornerSqueezeMap.push_back(current);
     }
-    r2d2::Map map(cornerSqueezeMap);
+    r2d2::Dummy map(cornerSqueezeMap);
     map.print_map();
 
     //pathfinder initialisation
     r2d2::Translation robotBox{.5 * r2d2::Length::METER,
                                .5 * r2d2::Length::METER,
                                0 * r2d2::Length::METER};
-    LockingSharedObject<r2d2::Map> sharedMap{map};
+    LockingSharedObject<r2d2::ReadOnlyMap> sharedMap{map};
     r2d2::AStarPathFinder path_finder(sharedMap, {{}, robotBox});
 
     //navigator initialisation

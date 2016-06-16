@@ -117,11 +117,28 @@ namespace r2d2{
         //!
         CoordinateAttitude get_current_waypoint();
     protected:
+        //! @param     pilot is reference to a Pilot object wrapped in a
+        //!            LockingSharedObject
         LockingSharedObject<Pilot> pilot;
-        PathFinder & path_finder;
+        //! @param     path_finder is reference to a PathFinder object wrapped
+        //!            in aLockingSharedObject
+        LockingSharedObject<PathFinder> path_finder;
+        //! @param     robot_coordinate_attitude is reference to the current
+        //!            robot orientation, which is of type CoordinateAttitude,
+        //!            wrapped in a LockingSharedObject
         LockingSharedObject<CoordinateAttitude> robot_coordinate_attitude;
+        //! @param     goal is reference to the goal where te Navigator is
+        //!            navigating the Pilot to, which is of type
+        //!            CoordinateAttitude, wrapped in a LockingSharedObject.
+        //!            This object is initialized with private member
+        //!            goal_object
         LockingSharedObject<CoordinateAttitude> goal;
+        //! @param     path is a Shared std::vector<Coordinate>> object which is
+        //!            the path the Pilot will follow.this object is initialized
+        //!            with private member p
         LockingSharedObject<std::vector<Coordinate>> path;
+        //! @param     CoordinateAttitude which contains the current waypoint of
+        //!            the Pilot is following. ;
         CoordinateAttitude current_waypoint{Coordinate(), Attitude()};
     private:
         std::vector<Coordinate> p;

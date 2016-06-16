@@ -58,16 +58,22 @@ namespace r2d2{
             waypoint_precision_margin(waypoint_precision_margin){}
 
     void DefaultNavigator::update(){
+        // Check if the pilot is in range of the waypoint
         if(has_reached_waypoint()){
             std::vector<Coordinate> & path_vector = LockingSharedObject<std
                 ::vector<Coordinate>>::Accessor(path).access();
             Pilot & p = SharedObject<Pilot>::Accessor(pilot).access();
             p.stop();
+            // check if the path is not empty, so the next waypoint can be
+            // shifted to the pilot.
             if (!path_vector.empty()){
                 CoordinateAttitude & coordinate_attitude_data =
                     SharedObject<CoordinateAttitude>
                     ::Accessor(robot_coordinate_attitude).access();
                 Angle angle;
+                // check if the path vector contains more than only the last
+                // waypoint. If this is true calculate the angle between the
+                // next waypoint and the waypoint after the next waypoint.
                 if (path_vector.size() > 1){
                     angle = atan2((path_vector[1].get_y() -
                         current_waypoint.coordinate.get_y()) / Length
@@ -75,16 +81,22 @@ namespace r2d2{
                         current_waypoint.coordinate.get_x()) / Length
                         ::METER) * Angle::rad;
                 }
+                // if the path contains only 1 element, assign the goal angle
+                // to the new waypoint angle.
                 else {
                     angle = SharedObject<CoordinateAttitude>::Accessor(
                         get_goal()).access().attitude.angle_z.get_angle()
                         * Angle::rad;
                 }
 
+                // combine the Coordinate from the path and the obtained angle
+                // to an CoordinateAttitude and assign this to the
+                // current_waypoint.
                 current_waypoint = {path_vector[0], Attitude(0 * Angle
                         ::rad, 0 * Angle::rad, angle)};
                 path_vector.erase(path_vector.begin());
 
+                // Then shift it to the pilot.
                 p.go_to_position(current_waypoint);
             }
         }
@@ -104,38 +116,42 @@ namespace r2d2{
             ::Accessor(robot_coordinate_attitude).access();
 
         // check if the x coordinate is in range of the precision_margin
-        if (coordinate_attitude_data.coordinate.get_x() <
-            (current_waypoint.coordinate + Translation{
-            waypoint_precision_margin.coordinate.get_x(), 0 *
-            Length::METER, 0 * Length::METER}).get_x() &&
-            coordinate_attitude_data.coordinate.get_x() >
-            (current_waypoint.coordinate -
-            Translation{waypoint_precision_margin.coordinate.get_x(),
-            0 * Length::METER, 0 * Length::METER}).get_x()){
-
+        if(in_range(
+                coordinate_attitude_data.coordinate.get_x(),
+                current_waypoint.coordinate.get_x(),
+                waypoint_precision_margin.coordinate.get_x()
+            )){
             // check if the y coordinate is in range of the precision_margin
-            if (coordinate_attitude_data.coordinate.get_y() <
-                (current_waypoint.coordinate + Translation{0 *
-                Length::METER,
-                waypoint_precision_margin.coordinate.get_y(),0 *
-                Length::METER}).get_y() &&
-                coordinate_attitude_data.coordinate.get_y() >
-                (current_waypoint.coordinate - Translation{0 *
-                Length::METER,
-                waypoint_precision_margin.coordinate.get_y(), 0 *
-                Length::METER}).get_y()){
-
+            if(in_range(
+                    coordinate_attitude_data.coordinate.get_y(),
+                    current_waypoint.coordinate.get_y(),
+                    waypoint_precision_margin.coordinate.get_y()
+                )){
                 // check if the attitude yaw is in range of the percision_margin
-                if (coordinate_attitude_data.attitude.angle_z.get_angle() <
-                    current_waypoint.attitude.angle_z.get_angle() +
-                    waypoint_precision_margin.attitude.angle_z.get_angle() &&
-                    coordinate_attitude_data.attitude.angle_z.get_angle() >
-                    current_waypoint.attitude.angle_z.get_angle() -
-                    waypoint_precision_margin.attitude.angle_z.get_angle()){
-                        return true;
+
+                // TODO remove attitude.angle_z (stub from Stubs.hpp in Pilot)
+                // to attitude.get_yaw()
+                if(in_range(
+                        coordinate_attitude_data.attitude.angle_z,
+                        current_waypoint.attitude.angle_z,
+                        waypoint_precision_margin.attitude.angle_z
+                    )){
+
+                    return true;
                 }
             }
         }
         return false;
+    }
+    //function which checks if length_1 is between length_2 + precision_margin and length_2 - precision_margin
+    bool DefaultNavigator::in_range(Length length_1, Length length_2, Length precision_margin){
+            return ((length_2 - precision_margin) < length_1) &&
+                (length_1 < (length_2 + precision_margin));
+    }
+
+    //function which checks if angle_1 is between angle_2 + precision_margin and angle_2 - precision_margin
+    bool DefaultNavigator::in_range(Angle angle_1, Angle angle_2, Angle precision_margin){
+            return ((angle_2 - precision_margin) < angle_1) &&
+                (angle_1 < (angle_2 + precision_margin));
     }
 }

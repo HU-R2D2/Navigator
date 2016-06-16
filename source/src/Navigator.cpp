@@ -60,20 +60,28 @@ namespace r2d2{
     }
 
     bool Navigator::set_goal(CoordinateAttitude new_goal){
+        // acquire the goal object
         LockingSharedObject<CoordinateAttitude>::Accessor goal_accessor(goal);
         CoordinateAttitude & goal_data  = goal_accessor.access();
         goal_data = new_goal;
 
+        // acquire the robots orientation object
         LockingSharedObject<CoordinateAttitude>::Accessor
             robot_orientation_accessor(robot_coordinate_attitude);
             CoordinateAttitude & robot_orientation_data =
-            robot_orientation_accessor.access();
+                robot_orientation_accessor.access();
 
             std::vector<Coordinate> & path_vector =
-            LockingSharedObject<std::vector<Coordinate>>::Accessor(path)
-            .access();
+                LockingSharedObject<std::vector<Coordinate>>::Accessor(path)
+                .access();
 
-        if(path_finder.get_path_to_coordinate(robot_orientation_data.coordinate,
+        // acqquire path_finder
+        LockingSharedObject<PathFinder>::Accessor
+            path_finder_accessor(path_finder);
+            PathFinder & pf = path_finder_accessor.access();
+
+        // find a new path to the given goal.
+        if(pf.get_path_to_coordinate(robot_orientation_data.coordinate,
             new_goal.coordinate, path_vector)){
                 return true;
         }

@@ -77,7 +77,7 @@ namespace r2d2{
         //!@param     path_finder     PathFinder object which calculates a path
         //!           between two points
         //!@param     robot_coordinate_attitude    CoordinateAttitude object
-        //!           which contains Pilot currents coordinates
+        //!           which contains Pilot current coordinates
         //!@param     waypoint_precision_margin    CoordinateAttitude object
         //!           which is the precision_margin of every waypoint
         //!
@@ -94,11 +94,14 @@ namespace r2d2{
 
         //!
         //! @brief     Function that periodically updates the DefaultNavigator
+        //!            This Function is a blocking call.
         //!
         void run();
 
 	private:
 	    bool has_reached_waypoint();
+        bool in_range(Length length_1, Length length_2, Length precision_margin);
+        bool in_range(Angle angle_1, Angle angle_2, Angle precision_margin);
 		CoordinateAttitude waypoint_precision_margin;
     };
 }

@@ -79,7 +79,7 @@ int main(int argc,char *argv[]) {
         Attitude & my_attitude = coordinate_attitude.attitude;
         r2d2::Coordinate & my_coordinate = coordinate_attitude.coordinate;
 
-		std:cout << "waypoint:    " << navigator.get_current_waypoint()
+		std::cout << "waypoint:    " << navigator.get_current_waypoint()
             .coordinate << " "  << navigator.get_current_waypoint()
             .attitude.angle_z << std::endl;
 
